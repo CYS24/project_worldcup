@@ -1,0 +1,47 @@
+.lookfor{
+
+    width: 270px;
+    
+    position: absolute;
+    
+    right: 0;
+    
+    top: 30px;
+    
+    border-bottom: 1px solid #cdcdcd;
+    
+    }
+    
+    .lookfor > span{
+    
+    font-size: 1rem;
+    
+    font-weight: 700;
+    
+    transform: skew(-0.03deg);
+    
+    display: inline-block;
+    
+    padding: 0px 15px 0 5px;
+    
+    }
+    
+    .lookfor_input{
+    
+    width: 136px;
+    
+    border: none;
+    
+    padding: 7px;
+    
+    }
+    
+    .lookfor_input2{
+    
+    border: none;
+    
+    width: 20px;
+    
+    padding: 7px;
+    
+    }

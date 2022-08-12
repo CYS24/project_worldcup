@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>엄마가 좋아 ? 아빠가 좋아 ?</title>
+        <meta charset="utf-8">
+        {% load static %}
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+        <script language="javascript">
+            temp = location
+                .href
+                .split("?");
+            data = temp[1].split("@");
+            console.log("data" + decodeURI(data[0]))
+            winner_name = decodeURI(data[0]);
+            winner_src = data[1];
+            document
+                .getElementById('name')
+                .innerHTML = winner_name;
+            document
+                .getElementById('url')
+                .src = winner_src;
+            //document.writｅ(winner_name + " " + winner_src );   페이지에 전달받은 값 띄워서 확인하기
+            function zoomIn(event) {
+                event.target.style.transform = "scale(1.2)";
+                event.target.style.zIndex = 1;
+                event.target.style.transition = "all 0.5s";
+            }
+            function zoomOut(event) {
+                event.target.style.transform = "scale(1)";
+                event.target.style.zIndex = 0;
+                event.target.style.transition = "all 0.5s";
+            }
+        </script>
+        <style>
+            img {
+                border: 5px solid white;
+                border-radius: 7px;
+                moz-border-radius: 7px;
+                khtml-border-radius: 7px;
+                webkit-border-radius: 7px;
+
+                width: 550px;
+                height: 550px;
+                max-width: 100%;
+                max-height: 100%;
+            }
+            body{
+                font-family: 'Gowun Dodum', sans-serif;
+                font-weight: bold;
+            }
+            .btn{
+                font-weight: bold;
+                font-size: 2rem;
+            }
+            .container{
+                font-size: 2rem;
+            }
+            div{
+                font-weight:bold;
+            }
+        </style>
+    </head>
+    <body style="background-color: black">
+        {% comment %}  {% endcomment %}
+        <marquee behavior="alternate" bgcolor="white">
+            {% comment %} <font color="black"> </font> 🏆{{winner_row.name}}🏆 🏆{{winner_row.name}}🏆 🏆{{winner_row.name}}🏆 🏆{{winner_row.name}}🏆 </font> {% endcomment %}
+            <font size="20px" color="black"> 🎉{{winner_row.name}} 1등 ~!! 🎉{{winner_row.name}} 1등 ~!! 🎉{{winner_row.name}} 1등 ~!! 🎉{{winner_row.name}} 1등 ~!! 🎉{{winner_row.name}} 1등 ~!! 🎉{{winner_row.name}} 1등 ~!!</font>
+        </marquee>
+        <div style="font-color:black; font-size:1px">{{winner_row}}</div>
+        <div class="container my-4 py-4">
+            <div class="row" style="text-align:center;">
+                <div class="col mx-5">
+                    <div style="color:white; line-height:2; font-size:2.5rem; line-height:2">Winner</div>
+                    <img id="url" src="{{winner_row.url}}" onmouseenter="zoomIn(event)" onmouseleave="zoomOut(event)">
+                    <div id="name" style="color:white; font-size:2.5rem; line-height:2">{{winner_row.name}}</div>
+                </div>
+                <div class="col my-4 px-5 py-2 pb-4">
+                    <div class="row mx-5 my-5 mt-5">
+                        <a class="btn btn-info py-5" style="font-size:2rem" href='/home'>홈으로</a>
+                    </div>
+                    <div class="row mx-5 my-5">
+                        <a class="btn btn-info py-5" style="font-size:2rem" href='/play/{{selected_theme}}/{{rounds}}'>재시작</a>
+                    </div>
+                    <div class="row mx-5 my-5">
+                        <a class="btn btn-info py-5" style="font-size:2rem" href='/ranking/{{selected_theme}}'>리스트</a>    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <marquee behavior="alternate" bgcolor="white">
+            <font size="20px" color="black"> 🎉{{winner_row.name}} 1등 ~!! 
+                🎉{{winner_row.name}} 1등 ~!! 🎉{{winner_row.name}} 1등 ~!! 
+                🎉{{winner_row.name}} 1등 ~!! 🎉{{winner_row.name}} 1등 ~!! 
+                🎉{{winner_row.name}} 1등 ~!!</font>
+        </marquee>
+
+
+    </body>
+</html>
+
+                        

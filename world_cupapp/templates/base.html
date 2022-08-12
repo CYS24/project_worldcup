@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        {% load static %}
+        {% block head %}
+        <title>엄마가 좋아? 아빠가 좋아?</title>
+        {% endblock %}
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossorigin="crossorigin">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap"
+            rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Gowun Dodum', sans-serif;
+            }
+        </style>
+    </head>
+
+<link href="{% static 'css/styles.css' %}" rel="stylesheet"/>    
+<body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-info">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="/home">아빠가좋아? 엄마가좋아?</a>
+            <!-- Sidebar Toggle-->
+            <button
+                class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
+                id="sidebarToggle"
+                href="#!">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- Navbar Search-->
+            <form
+                class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
+            {% if request.session.login_ok_user %}
+                <span style="color:white">{{request.session.login_ok_user}}님 어서오세요</span>
+            {% else %}
+            {% endif %}
+
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link dropdown-toggle"
+                        id="navbarDropdown"
+                        href="#"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        {% if request.session.login_ok_user %}
+                            <li>
+                                <a class="dropdown-item" href="/logout">Logout</a>
+                            </li>
+                            <li><hr class="dropdown-divider"/></li>
+                            <li>
+                                <a class="dropdown-item" href="/info/{{request.session.login_ok_user}}">user info</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a class="dropdown-item" href="/">Login</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="/register">Create Account</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-white" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">
+                                <!--Home-->
+                            </div>
+
+                            <a
+                                class="nav-link collapsed"
+                                href="#"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseLayouts"
+                                aria-expanded="false"
+                                aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-table"></i>
+                                </div>
+                                순위
+                                <div class="sb-sidenav-collapse-arrow">
+                                    <i class="fas fa-angle-down"></i>
+                                </div>
+                            </a>
+                            <div
+                                class="collapse"
+                                id="collapseLayouts"
+                                aria-labelledby="headingOne"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    {% for object in list_first_by_theme %}
+                                        <a class="nav-link" href="/ranking/{{object.theme}}">{{object.theme}}
+                                            순위보기</a>
+                                    {% endfor %}
+                                </nav>
+                            </div>
+                            <a
+                                class="nav-link collapsed"
+                                href="#"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseLayouts"
+                                aria-expanded="false"
+                                aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon">
+                                    <i class="fas fa-table"></i>
+                                </div>
+                                순위
+                                <div class="sb-sidenav-collapse-arrow">
+                                    <i class="fas fa-angle-down"></i>
+                                </div>
+                            </a>
+                            <div
+                                class="collapse"
+                                id="collapseLayouts"
+                                aria-labelledby="headingOne"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    {% for object in list_first_by_theme %}
+                                        <a class="nav-link" href="/ranking/{{object.theme}}">{{object.theme}}
+                                            순위보기</a>
+                                    {% endfor %}
+                                </nav>
+                            </div>
+                        </div>
+
+                    </nav>
+                </div>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">당신을 난처하게 할 밸런스 게임</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item active"></li>
+                            </ol>
+
+                            <!-- 검색창 -->
+                            <form
+                                class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                                <div class="input-group">
+                                    <input
+                                        id="Searchplace"
+                                        class="form-control"
+                                        type="text"
+                                        placeholder="검색할래 ? 클릭할래 ?"
+                                        aria-label="Search for..."
+                                        style="float:left; width:1000px;height:40px;font-size:30px;"
+                                        aria-describedby="btnNavbarSearch"
+                                        onkeypress="if(event.keyCode==13) {search(); return false;}"/>
+                                    <button
+                                        class="btn btn-info"
+                                        id="btnNavbarSearch"
+                                        type="button"
+                                        onclick="search()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- 랜덤버튼 -->
+                            <button
+                                role="button"
+                                class="btn btn-info"
+                                onclick="play_random()"
+                                style="vertical-align:text-bottom;float:right;width:400px;height:40px;">랜덤플레이</a>
+
+                        </div>
+                        <script>
+                            function play_random() {
+                                div_all_theme.sort(function (a, b) {
+                                    return 0.5 - Math.random()
+                                });
+                                console.log(div_all_theme[0])
+                                seleted_random_theme = div_all_theme[0]
+                                location.href = "/modal/" + seleted_random_theme
+                            }
+                        </script>
+                        {% block sidebar %}
+
+                            {% endblock%}

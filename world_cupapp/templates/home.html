@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        {% load static %}
+        {% block head %}
+            <title>엄마가 좋아? 아빠가 좋아?</title>
+        {% endblock %}
+        <link
+            href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+            rel="stylesheet"/>
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+        <script
+            src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
+            crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+        <style>
+            body{
+                font-family: 'Gowun Dodum', sans-serif;
+                font-weight: bold;
+            }
+            .dropdown-menu{
+                font-family: 'Gowun Dodum', sans-serif;
+                font-weight: bold;
+            }
+            .btn{
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-info">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="/home">아빠가 좋아? 엄마가 좋아? </a>
+            <!-- Sidebar Toggle-->
+            <button
+                class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
+                id="sidebarToggle"
+                style="padding:2rem"
+                href="#!">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            </form>
+            {% if request.session.login_ok_user %}
+                <span style="color:white">{{request.session.login_ok_user}}님 어서오세요</span>
+            {% else %}
+            {% endif %}
+
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">                        
+                        {% if request.session.login_ok_user %}
+                        <li><a class="dropdown-item" href="/logout" style="color:black; font-weight:bold; font-size:1.2rem">로그아웃</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="/info/{{request.session.login_ok_user}}" style="color:black; font-weight:bold; font-size:1.2rem">회원정보</a></li>
+                        {% else %}
+                        <li><a class="dropdown-item" href="/" style="color:black; font-weight:bold; font-size:1.2rem">로그인</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/register" style="color:black; font-weight:bold; font-size:1.2rem">회원가입</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-white" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu" style="background-color: #0dcaf075;">
+                        <div class="nav my-2 mx-1">
+                                <a class="nav-link collapsed" href="#" style="color:black !important; font-size:1.2rem !important;" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                    <div class="sb-nav-link-icon" style="font-size:1.2rem">🏆</div>
+                                    <span>순위</span>
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        {% for object in list_first_by_theme %}
+                                        <a class="nav-link" style="color:black !important; font-size:1.2rem !important;" href="/ranking/{{object.theme}}">{{object.theme}}</a>
+                                        {% endfor %}
+                                    </nav>
+                                </div>            
+                    </div>
+
+                    
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4" style="font-weight:bold">당신을 난처하게 할 밸런스 게임</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"></li>
+                        </ol>
+
+       <!-- 검색창 -->
+                        <div class="row-md-12 input-group">
+                            <div class="col-md-9">
+                            <input
+                                id="Searchplace"
+                                class="form-control"
+                                type="text"
+                                placeholder="검색할래 ? 클릭할래 ?"
+                                aria-label="Search for..."
+                                style="float:left; width:800px;height:40px;font-size:1.3rem;"
+                                aria-describedby="btnNavbarSearch"
+                                onkeypress="if(event.keyCode==13) {search(); return false;}"/>
+                                <button
+                                class="btn btn-info"
+                                id="btnNavbarSearch"
+                                type="button"
+                                onclick="search()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button
+                                role="button"
+                                class="btn btn-info ml-5 pb-4 pt-1"
+                                onclick="play_random()"
+                                style="font-size:1.3rem;width:300px;height:40px;">랜덤 플레이</a>
+                            </div>
+                            
+                        </div>
+                    
+                    
+                    
+                    <!-- 랜덤버튼 -->
+                    
+
+                </div>
+                <script>
+                    
+                </script>
+                {% block sidebar %}
+                 </br>
+
+                    
+                    <div class="container-fluid" style="height: auto !important;">
+                        <div class="row equal">
+                            <div id="list0" class="col-xl-12 list">
+                                {% for object in list_first_by_theme %}
+                                <div id ="{{object.theme}}" name ="{{object.name}}" class="col-xl-3 px-2" style="display:inline; float:left;">
+                                    <div class="card mb-3">
+                                        <div class="card-header bg-white">
+                                            <h3>
+                                                <b style="font-size:22px; color:#000000;">최고의 {{object.theme}}</b>
+                                            </h3>
+                                            현재 1등 - {{object.name}}
+                                        </div>
+                                        <div class="card-body" style="font-size:0; text-align:center; padding:0px;">
+                                            <div class="item" style="display:inline-block; vertical-align:middle; height:33vh; width:100%;">
+                                                <img src="{{object.url}}" style="width:100%;height:100%" alt="img">
+                                            </div>
+                                        </div>
+                                        <div style="width:100%;text-align:center;" class="card-footer small text-muted bg-white">
+                                            <a id="random"{{forloop.counter}}""role="button" style="margin:1rem" href="/modal/{{object.theme}}" class="btn btn-info">플레이 할래?</a>
+                                            <a role="button" style="padding:0.35rem 1.25rem" href="/ranking/{{object.theme}}" class="btn btn-danger">순위 볼래?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            
+                    
+                </main>
+                
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Team3 Website 2022</div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    </body>
+</html>
+{% endblock%}
+
+<script>
+    let div_all_theme = [{% for object in list_first_by_theme %}
+            "{{object.theme}}",
+        {% endfor %}]
+    let div_all_name = [{% for object in list_first_by_theme %}
+            "{{object.name}}",
+        {% endfor %}]
+    //console.log(div_all_theme)
+    //console.log(div_all_name)
+
+    function play_random() {
+        div_all_theme.sort(function (a, b) {
+            return 0.5 - Math.random()
+        });
+        seleted_random_theme = div_all_theme[0]
+        console.log("확인용"+seleted_random_theme)
+
+        //location.href = "이동할 페이지 주소";​
+        //location.href = "/modal/";
+        link="/modal/" + seleted_random_theme;
+        console.log(link)
+
+        location.href =  "/modal/" + seleted_random_theme;
+
+
+        //window.location.href =  "/modal/" + seleted_random_theme
+        link="/modal/" + seleted_random_theme;
+        console.log(link)
+        window.location.assign(link);
+
+    }
+
+    function search() {
+        const searched_text = document
+            .getElementById('Searchplace')
+            .value;
+        document
+            .getElementById('Searchplace')
+            .value = "";
+        console.log("33333333333333333333333333333333");
+        var input_enter = true;
+        if (searched_text == "") 
+            input_enter = false;
+        
+        if (searched_text == "") {
+            console.log("1111111111111111111");
+        }
+        console.log("2222222222222222222");
+
+        finded_div1 = document.getElementById(searched_text);
+        list_finded_div2 = document.getElementsByName(searched_text);
+        finded_div2 = list_finded_div2[0]
+        //finded_div.style.display console.log("searched_text"+searched_text);
+        console.log("찾은네모");
+        console.log(finded_div1);
+        console.log(finded_div2);
+
+        for (var i = 0; i < div_all_theme.length; i++) {
+            div_in_html1 = document.getElementById(div_all_theme[i]);
+            list_div_in_html2 = document.getElementsByName(div_all_name[i]);
+            div_in_html2 = list_div_in_html2[0];
+
+            console.log(i + "번쨰바퀴")
+            if (div_in_html1 == finded_div1 || div_in_html2 == finded_div2 || input_enter == false) {
+                div_in_html1.style = "display:inline; float:left;"
+                div_in_html2.style = "display:inline; float:left;"
+                console.log("검색과 똑같은놈 찾음")
+            } else {
+                console.log("검색과 다른놈 찾음")
+                div_in_html1.style = "display:none; float:left;";
+                div_in_html2.style = "display:none; float:left;"
+
+            }
+        }
+    }
+</script>

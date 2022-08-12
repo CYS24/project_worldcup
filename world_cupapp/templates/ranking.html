@@ -1,0 +1,194 @@
+{% extends 'home.html' %}
+<head>
+    {% load static %}
+    {% block head %}
+        <title>ranking 순위사이트</title>
+        <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet"/>
+        <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+    {% endblock %}
+</head>
+{% block sidebar %}
+    <body>
+        <div class="container"></br>
+            <center>
+                <h1>{{selected_theme}}순위 TOP</h1>
+                {{selected_theme}}
+                가 플레이 된 총 횟수
+                {{theme_total_play}}회
+            </center></br>
+
+        </div>
+        <div class="two_wrap">
+            <div class="wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>이름</th>
+                            <th>우승횟수</th>
+                            <th>승률</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <style>
+                            .gallery {
+                                width: 50px;
+                                height: 50px;
+                                vertical-align: middle;
+                            }
+                        </style>
+                        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
+                        <script charset="utf-8" src="{% static 'css/_main.css' %}"></script>
+                        <link rel='stylesheet' href="{% static 'css/_main.css' %}">
+
+                        {% for object, rate in zipped_list_ranking_objects %}
+                            <tr>
+                                <td class="rank">{{forloop.counter}}</td>
+                                <td class="namename">
+                                    <img
+                                        src="{{object.url}}"
+                                        data-image="{{object.name}}"
+                                        class="gallery"
+                                        alt="small_image"/>
+                                    {{object.name}}
+                                </td>
+                                <td class="points">{{object.win_num}}</td>
+                                <td class="up-down">{{rate}}&nbsp;%</br>
+                                <progress id="progress" value="{{rate}}" min="0" max="100"></progress>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="chat_wrap">
+            <form action="/ranking/{{selected_theme}}" method="post">
+                {% csrf_token %}
+                {{request.session.login_ok_user}}
+                :
+                <input name='comment' type='text'/><input type='submit'>
+
+            </form>
+            <div class="inner">
+                {% for comment_object in comment_objects %}
+                    <div class="item mymsg on">
+                        <div class="box">
+                            <p class="msg">{{comment_object.username}}<br>
+                                {{comment_object.comment}}</p>
+                            <span class="time">{{comment_object.date}}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    $(document).ready(function () {
+        var xOffset = 10;
+        var yOffset = 30;
+
+        //마우스 오버시 preview 생성
+        $(document).on("mouseover", ".gallery", function (e) {
+            var image_data = $(this).data("image");
+            var add_caption = (image_data != undefined)
+                ? "<br/>안녕" + image_data
+                : "";
+            $("body").append(
+                "<p id='preview'><img src='" + $(this).attr("src") + "' width='400px' />" +
+                add_caption + "</p>"
+            );
+            $("#preview")
+                .css("top", (e.pageY - xOffset) + "px")
+                .css("left", (e.pageX + yOffset) + "px")
+                .fadeIn("fast");
+        });
+
+        //마우스 이동시 preview 이동
+        $(document).on("mousemove", ".gallery", function (e) {
+            $("#preview")
+                .css("top", (e.pageY - xOffset) + "px")
+                .css("left", (e.pageX + yOffset) + "px");
+        });
+
+        //마우스 아웃시 preview 제거
+        $(document).on("mouseout", ".gallery", function () {
+            $("#preview").remove();
+        });
+    });
+</script>
+
+<footer class="py-4 bg-light mt-auto">
+    <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Your Website 2022</div>
+            <div>
+                <a href="#">Privacy Policy</a>
+                &middot;
+                <a href="#">Terms &amp; Conditions</a>
+            </div>
+        </div>
+    </div>
+</footer>
+</html>
+{% endblock %}
+<script>
+    let div_all_theme = [{% for object in list_first_by_theme %}
+            "{{object.theme}}",
+        {% endfor %}]
+    let div_all_name = [{% for object in list_first_by_theme %}
+            "{{object.name}}",
+        {% endfor %}]
+    console.log(div_all_theme)  
+    console.log(div_all_name)
+
+    function search() {
+        const searched_text = document
+            .getElementById('Searchplace')
+            .value;
+        document
+            .getElementById('Searchplace')
+            .value = "";
+        console.log("33333333333333333333333333333333");
+        var input_enter = true;
+        if (searched_text == "") 
+            input_enter = false;
+        
+        if (searched_text == "") {
+            console.log("1111111111111111111");
+        }
+        console.log("2222222222222222222");
+
+        finded_div1 = document.getElementById(searched_text);
+        list_finded_div2 = document.getElementsByName(searched_text);
+        finded_div2 = list_finded_div2[0]
+        //finded_div.style.display console.log("searched_text"+searched_text);
+        console.log("찾은네모");
+        console.log(finded_div1);
+        console.log(finded_div2);
+
+        for (var i = 0; i < div_all_theme.length; i++) {
+            div_in_html1 = document.getElementById(div_all_theme[i]);
+            list_div_in_html2 = document.getElementsByName(div_all_name[i]);
+            div_in_html2 = list_div_in_html2[0];
+
+            console.log(i + "번쨰바퀴")
+            if (div_in_html1 == finded_div1 || div_in_html2 == finded_div2 || input_enter == false) {
+                div_in_html1.style = "display:inline; float:left;"
+                div_in_html2.style = "display:inline; float:left;"
+                console.log("검색과 똑같은놈 찾음")
+            } else {
+                console.log("검색과 다른놈 찾음")
+                div_in_html1.style = "display:none; float:left;";
+                div_in_html2.style = "display:none; float:left;"
+
+            }
+
+        }
+
+    }
+</script>
